@@ -14,3 +14,4 @@ sudo alsactl store 2>/dev/null || true
 echo "Громкость установлена на максимум"
 reboot
 exit
+26022011

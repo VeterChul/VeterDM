@@ -337,14 +337,14 @@ def repl():
         user_input = user_input.strip()
             
         if user_input == "":
-            play_key_sound('/opt/VeterDM/crt-greeter/tap.mp3')  
+            play_key_sound('/opt/VeterDM/share/crt-greeter/tap.mp3')  
         elif user_input == ":" and mode:
-            play_key_sound('/opt/VeterDM/crt-greeter/tap.mp3')  
+            play_key_sound('/opt/VeterDM/share/crt-greeter/tap.mp3')  
             mode = False
         elif mode:
             # В режиме пароля считаем, что пользователь ввёл пароль
         
-            os.system('mpg123 -q -f 32768 /opt/VeterDM/crt-greeter/poweroff.mp3')  
+            os.system('mpg123 -q -f 32768 /opt/VeterDM/share/crt-greeter/poweroff.mp3')  
             password = user_input
             if authenticate_and_start_session(BD["user"], password, BD["cmd_exec"]):
                 save_state(BD)
@@ -353,7 +353,7 @@ def repl():
                 print("Ошибка входа")
                 continue
         elif not(mode):
-            play_key_sound('/opt/VeterDM/crt-greeter/tap.mp3')  
+            play_key_sound('/opt/VeterDM/share/crt-greeter/crt-greeter/tap.mp3')  
             list_user_input = user_input.split(" ")
 
             match list_user_input[0]:
@@ -403,7 +403,7 @@ if __name__ == "__main__":
         }
     
     set_initial_volume()
-    play_key_sound("/var/lib/crt-greeter/poweron.mp3")
+    play_key_sound("/opt/VeterDM/share/crt-greeter/poweron.mp3")
 
     hello = """
     Для получания справки пропиши:

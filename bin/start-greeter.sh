@@ -19,7 +19,7 @@ mkdir -p "$XDG_CONFIG_HOME"
 #    cp "/usr/local/share/crt-greeter/cool-retro-term.conf" "$XDG_CONFIG_HOME/cool-retro-term/"
 #fi
 
-export SHELL=/opt/VeterDM/share/crt-wrapper.sh
+export SHELL=/opt/VeterDM/bin/crt-wrapper.sh
 
 # Замените строку с exec cage на эту:
 exec cage -s -d -- /opt/VeterDM/bin/cool-retro-term-castom --fullscreen #-e /usr/local/bin/crt-greeter.py
