@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export HOME="/var/lib/crt-greeter"
+export HOME="/opt/VeterDM/share/crt-greeter"
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_RUNTIME_DIR="/run/user/$(id -u greeter)"
 
@@ -19,7 +19,7 @@ mkdir -p "$XDG_CONFIG_HOME"
 #    cp "/usr/local/share/crt-greeter/cool-retro-term.conf" "$XDG_CONFIG_HOME/cool-retro-term/"
 #fi
 
-export SHELL=/usr/local/bin/crt-wrapper.sh
+export SHELL=/opt/VeterDM/share/crt-wrapper.sh
 
 # Замените строку с exec cage на эту:
-exec cage -s -d -- /usr/local/bin/cool-retro-term-castom --fullscreen #-e /usr/local/bin/crt-greeter.py
+exec cage -s -d -- /opt/VeterDM/bin/cool-retro-term-castom --fullscreen #-e /usr/local/bin/crt-greeter.py

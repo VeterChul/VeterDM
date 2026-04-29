@@ -111,7 +111,7 @@ def get_state_file_path():
     home = os.environ.get('HOME')
     if not home:
         # fallback для отладки (в реальной среде HOME всегда будет задан)
-        home = '/var/lib/crt-greeter'
+        home = '/opt/VeterDM/crt-greeter'
     state_dir = os.path.join(home, '.config')
     os.makedirs(state_dir, exist_ok=True)
     return os.path.join(state_dir, 'greetd-state.json')
@@ -337,14 +337,14 @@ def repl():
         user_input = user_input.strip()
             
         if user_input == "":
-            play_key_sound('/var/lib/crt-greeter/tap.mp3')  
+            play_key_sound('/opt/VeterDM/crt-greeter/tap.mp3')  
         elif user_input == ":" and mode:
-            play_key_sound('/var/lib/crt-greeter/tap.mp3')  
+            play_key_sound('/opt/VeterDM/crt-greeter/tap.mp3')  
             mode = False
         elif mode:
             # В режиме пароля считаем, что пользователь ввёл пароль
         
-            os.system('mpg123 -q -f 32768 /var/lib/crt-greeter/poweroff.mp3')  
+            os.system('mpg123 -q -f 32768 /opt/VeterDM/crt-greeter/poweroff.mp3')  
             password = user_input
             if authenticate_and_start_session(BD["user"], password, BD["cmd_exec"]):
                 save_state(BD)
@@ -353,7 +353,7 @@ def repl():
                 print("Ошибка входа")
                 continue
         elif not(mode):
-            play_key_sound('/var/lib/crt-greeter/tap.mp3')  
+            play_key_sound('/opt/VeterDM/crt-greeter/tap.mp3')  
             list_user_input = user_input.split(" ")
 
             match list_user_input[0]:
@@ -388,7 +388,6 @@ def repl():
 
 if __name__ == "__main__":
     
-
     mode = True
     test_flag = 0
     DE_dict = get_DE_dict(DE_json)
