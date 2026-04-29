@@ -1,0 +1,3 @@
+#!/bin/bash
+# VeterDM - обёртка для greetd
+exec greetd -c /etc/greetd/config.toml "$@"

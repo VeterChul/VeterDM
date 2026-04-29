@@ -1,0 +1,19 @@
+[Unit]
+Description=VeterDM - custom display manager (wrapper over greetd)
+Conflicts=getty@tty1.service
+After=systemd-user-sessions.service
+Before=getty@tty1.service
+
+[Service]
+Type=simple
+ExecStart=/opt/VeterDM/bin/veter-dm
+Restart=always
+RestartSec=1
+Environment=GREETD_CONFIG=/etc/greetd/config.toml
+TimeoutStopSec=30
+KillMode=mixed
+
+
+[Install]
+WantedBy=graphical.target
+
