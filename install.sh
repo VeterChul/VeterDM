@@ -24,36 +24,14 @@ else
     sudo usermod -a -G video,seat greeter
 fi
 
-# 3. Создание изолированной HOME для greeter
-echo "Создание /var/lib/crt-greeter..."
-sudo mkdir -p /var/lib/crt-greeter/.config
-sudo chown -R greeter:greeter /var/lib/crt-greeter
-sudo chmod 750 /var/lib/crt-greeter
 
 # 4. Создание симлинков (предполагается, что репозиторий клонирован в ~/VeterDM)
-REPO_DIR="$HOME/.myconfig/VeterDM"   # измените, если путь другой
-if [ ! -d "$REPO_DIR" ]; then
-    echo -e "${RED}Ошибка: репозиторий не найден в $REPO_DIR${NC}"
-    exit 1
-fi
-
-
-echo "Копирование файлов из $REPO_DIR в /opt/VeterDM"
 echo "Создание симлинков из $REPO_DIR в системные каталоги..."
-
-sudo mkdir /opt/VeterDM/
-sudo cp -r $REPO_DIR/. /opt/VeterDM/
-sudo chown -R greeter:greeter /opt/VeterDM
-sudo chmod 755 -R /opt/VeterDM/
-
-sudo rm -rf $REPO_DIR
 
 /opt/VeterDM/create-link.sh
 
 # 5. Права на скрипты
-sudo chmod +x /usr/local/bin/crt-greeter.py
-sudo chmod +x /usr/local/bin/start-greeter.sh
-sudo chmod +x /usr/local/bin/cool-retro-term-castom
+sudo chmod 770 -R /opt/VeterDM/
 
 # --- Дополнительные настройки для аутентификации и доступа ---
 echo "Настройка прав для аутентификации..."
@@ -61,10 +39,6 @@ sudo chmod u+s /usr/bin/unix_chkpwd 2>/dev/null || true
 if getent group shadow >/dev/null; then
     sudo usermod -a -G shadow greeter
 fi
-
-echo "Настройка прав на /var/lib/crt-greeter..."
-sudo chown -R greeter:greeter /var/lib/crt-greeter
-sudo chmod 750 /var/lib/crt-greeter
 
 # 6. Настройка PAM для greetd (если файла нет – создаём)
 if [ ! -f /etc/pam.d/greetd ]; then
