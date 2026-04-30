@@ -16,7 +16,7 @@
 Склонируйте репозиторий в `/opt/VeterDM`:
 
 ```bash
-sudo git clone https://github.com/VeterChul/hyprland_settings /opt/VeterDM
+sudo git clone https://github.com/VeterChul/VeterDM /opt/VeterDM
 ```
 
 ### Быстрая установка
