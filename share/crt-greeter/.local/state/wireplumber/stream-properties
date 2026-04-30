@@ -1,5 +1,5 @@
 [stream-properties]
 Output/Audio:application.name:PipeWire\sALSA\s\ompg123\c={"volume":1.000000, "mute":false, "channelVolumes":[1.000000, 1.000000], "channelMap":[]}
 Output/Audio:application.name:PipeWire\sALSA\s\oaplay\c={"channelMap":[], "channelVolumes":[1.000000, 1.000000], "volume":1.000000, "mute":false}
-Audio/Sink:node.name:auto_null={"volume":1.000000, "channelVolumes":[1.000000, 1.000000], "channelMap":["FL", "FR"], "mute":false}
-Output/Audio:application.name:SDL\sApplication={"volume":1.000000, "channelVolumes":[1.000000, 1.000000], "channelMap":[], "mute":false}
+Audio/Sink:node.name:auto_null={"volume":1.000000, "mute":false, "channelVolumes":[1.000000, 1.000000], "channelMap":["FL", "FR"]}
+Output/Audio:application.name:SDL\sApplication={"volume":1.000000, "mute":false, "channelVolumes":[1.000000, 1.000000], "channelMap":[]}

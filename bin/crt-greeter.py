@@ -325,15 +325,15 @@ def repl():
         try:
             #if mode != old_mode:
                 if mode:
-                    user_input = password_session.prompt(get_prompt)
+                    user_input_1 = password_session.prompt(get_prompt)
                 else:    
-                    user_input = cmd_session.prompt(get_prompt)
-                old_mode = mode
+                    user_input_1 = cmd_session.prompt(get_prompt)
+                #old_mode = mode
                 
         except (KeyboardInterrupt, EOFError):
             continue
         
-        user_input = user_input.strip()
+        user_input = user_input_1.strip()
             
         if user_input == "":
             play_key_sound('/opt/VeterDM/share/crt-greeter/tap.mp3')  
