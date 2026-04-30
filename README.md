@@ -19,21 +19,37 @@
 sudo git clone https://github.com/VeterChul/hyprland_settings /opt/VeterDM
 ```
 
-### Установка и настройка
+### Быстрая установка
 
 Можно запустить быструю установку с помощью
 ```
-cd ~/.myconfig
-chmod +x VeterDM/install.sh
-./VeterDM/install.sh
+cd /opt/VeterDM
+chmod +x install.sh
+./install.sh
 ```
+Скрипт выполнит следующие действия:
+- Скопирует все файлы проекта в `/opt/crt-greeter`
+- Создаст симлинки в `/usr/local/bin` и `/etc/greetd/config.toml`
+- Настроит права доступа (setuid на `unix_chkpwd`, группы `greeter`)
+- Отключит старый дисплейный менеджер (например, SDDM)
+
+ВАЖНО!
+
+Скрипт не отключает предыдущий DM.
+Сделайте это сами, после чего добавте новый в автозапукс. Проверьте, что все рабоает, прежде чем менять DM.
+
+```
+sudo systemctl enable veter-dm.service
+```
+
+
 
 ### Установка пакетов
 
 Установите необходимые системные пакеты:
 
 ```
-sudo pacman -S greetd cage seatd python-prompt-toolkit
+sudo pacman -S --noconfirm greetd cage seatd python-prompt_toolkit mpg123
 ```
 
 ### Создание пользователя
@@ -42,19 +58,6 @@ sudo pacman -S greetd cage seatd python-prompt-toolkit
 
 ```
 sudo useradd -r -M -G video,seat greeter
-```
-
-### Подготовка файлов проекта
-
-Склонируйте репозиторий в папку ~/.mycofig
-
-### Запуск установочного скрипта
-
-Сделайте скрипт исполняемым и запустите:
-
-```
-chmod +x install.sh
-./install.sh
 ```
 
 Скрипт выполнит следующие действия:
@@ -75,16 +78,10 @@ sudo systemctl enable --now greetd.service
 
 ### Проверка
 
-Поменяте TTY, для тестов:
-В файле [../VeterDM/share/greetd/config.toml](../VeterDM/share/greetd/config.toml) измените vt например на 7:
+Запустите VeterDM
 ```
-vt = 7
+sudo systemctl start veter-dm.service
 ```
-После чего запустите VeterDM
-```
-sudo systemctl start greetd.service
-```
-Если все штатно отработало и сессия запустилась, то поменяте vt обратно и спенимет DM по инструкции выше
 
 
 ### Перезагрузка
