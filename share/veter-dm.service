@@ -1,8 +1,8 @@
 [Unit]
 Description=VeterDM - custom display manager (wrapper over greetd)
-Conflicts=getty@tty1.service
+Conflicts=getty@tty7.service
 After=systemd-user-sessions.service
-Before=getty@tty1.service
+Before=getty@tty7.service
 
 [Service]
 Type=simple

@@ -41,7 +41,9 @@ def recv_greetd_response(sock):
 
 def authenticate_and_start_session(user, password, cmd_list):
     """Аутентификация через greetd и запуск сессии.
-       Возвращает True при успехе (после чего вызывающий код должен завершиться)."""
+       Возвращает True при успехе (после чего вызывающий код должен завершиться).
+    """
+    
     sock_path = os.environ.get('GREETD_SOCK')
     if not sock_path:
         print("Ошибка: переменная GREETD_SOCK не установлена", file=sys.stderr)
@@ -52,6 +54,7 @@ def authenticate_and_start_session(user, password, cmd_list):
         sock.connect(sock_path)
     except Exception as e:
         print(f"Ошибка подключения к greetd: {e}", file=sys.stderr)
+        sock.close()
         return False
 
     # 1. Создаём сессию
@@ -61,15 +64,12 @@ def authenticate_and_start_session(user, password, cmd_list):
         print("Ошибка при создании сессии:", response.get("error", "неизвестная"), file=sys.stderr)
         sock.close()
         return False
-
     # 2. Цикл обработки сообщений аутентификации
-    c = 0
-    while c < 5:
+    while True:
         if response.get("type") == "auth_message":
             msg_type = response.get("auth_message_type")
             # Если это запрос пароля (скрытый ввод)
             if msg_type == "secret":
-                c += 1
                 send_greetd_command(sock, {"type": "post_auth_message_response", "response": password})
             # Если информационное сообщение или другой тип (можно просто подтвердить)
             else:
@@ -80,6 +80,7 @@ def authenticate_and_start_session(user, password, cmd_list):
             break
         elif response.get("type") == "error":
             print("Ошибка аутентификации:", response.get("error", "неизвестная"), file=sys.stderr)
+            send_greetd_command(sock, {"type": "cancel_session"})
             sock.close()
             return False
         else:
@@ -93,8 +94,7 @@ def authenticate_and_start_session(user, password, cmd_list):
             print("Соединение с greetd потеряно", file=sys.stderr)
             sock.close()
             return False
-    if c == 5:
-        return False
+        
     # 3. Запускаем сессию
     if isinstance(cmd_list, str):
         cmd_list = cmd_list.split()
@@ -108,13 +108,14 @@ def get_state_file_path():
     Возвращает путь к файлу состояния, используя переменную окружения HOME.
     Если HOME не задана (не должно случиться), использует /var/lib/crt-greeter как fallback.
     """
-    home = os.environ.get('HOME')
-    if not home:
-        # fallback для отладки (в реальной среде HOME всегда будет задан)
-        home = '/opt/VeterDM/crt-greeter'
-    state_dir = os.path.join(home, '.config')
-    os.makedirs(state_dir, exist_ok=True)
-    return os.path.join(state_dir, 'greetd-state.json')
+    #home = os.environ.get('HOME')
+    #if not home:
+    #    # fallback для отладки (в реальной среде HOME всегда будет задан)
+    #    home = '/opt/VeterDM/crt-greeter'
+    #state_dir = os.path.join(home, '.config')
+    #os.makedirs(state_dir, exist_ok=True)
+    #return os.path.join(state_dir, 'greetd-state.json')
+    return "/opt/VeterDM/share/crt-greeter/.config/greetd-state.json"
 
 def load_state():
     """
@@ -207,7 +208,6 @@ def get_desktop_environments():
     sessions.sort(key=lambda x: x["name"])
     return sessions
 
-
 def set_initial_volume():
     subprocess.run(['amixer', 'sset', 'Master', '15dB+'], stderr=subprocess.DEVNULL)
 
@@ -243,6 +243,8 @@ completer = NestedCompleter.from_nested_dict({
     'changede': WordCompleter(des_names, ignore_case=True),
     'exit': None,
     'help': None,
+    'poweroff' : None,
+    'reboot' : None,
 })
 
 
@@ -318,13 +320,10 @@ def repl():
         style=custom_style,
         auto_suggest=AutoSuggestFromHistory(),
     )
-    old_mode = mode
-    user_input = password_session.prompt(get_prompt)
+    #old_mode = mode
     while True:
-        # ----- РЕЖИМ ПАРОЛЯ -----
-        
         try:
-            if mode != old_mode:
+            #if mode != old_mode:
                 if mode:
                     user_input = password_session.prompt(get_prompt)
                 else:    
@@ -343,17 +342,17 @@ def repl():
             mode = False
         elif mode:
             # В режиме пароля считаем, что пользователь ввёл пароль
-        
-            os.system('mpg123 -q -f 32768 /opt/VeterDM/share/crt-greeter/poweroff.mp3')  
             password = user_input
             if authenticate_and_start_session(BD["user"], password, BD["cmd_exec"]):
                 save_state(BD)
+                os.system('mpg123 -q -f 32768 /opt/VeterDM/share/crt-greeter/poweroff.mp3')  
                 sys.exit(0)
             else:
+                play_key_sound('/opt/VeterDM/share/crt-greeter/tap.mp3')  
                 print("Ошибка входа")
                 continue
         elif not(mode):
-            play_key_sound('/opt/VeterDM/share/crt-greeter/crt-greeter/tap.mp3')  
+            play_key_sound('/opt/VeterDM/share/crt-greeter/tap.mp3')  
             list_user_input = user_input.split(" ")
 
             match list_user_input[0]:
@@ -402,7 +401,7 @@ if __name__ == "__main__":
             "cmd_exec" : DE_dict[DE_json[0]["name"]],
         }
     
-    set_initial_volume()
+    #set_initial_volume()
     play_key_sound("/opt/VeterDM/share/crt-greeter/poweron.mp3")
 
     hello = """
@@ -417,7 +416,7 @@ if __name__ == "__main__":
     try:
         repl()
     except (KeyboardInterrupt, EOFError):
-        pass
+        print("Ошибка 1")
     
     
    
