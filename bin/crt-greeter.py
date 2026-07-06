@@ -404,6 +404,7 @@ if __name__ == "__main__":
     #set_initial_volume()
     play_key_sound("/opt/VeterDM/share/crt-greeter/poweron.mp3")
 
+    print(os.system("fastfetch"))
     hello = """
     Для получания справки пропиши:
         

@@ -1,0 +1,10 @@
+[default-routes]
+bluez_card.41_AA_01_3C_77_DB:input:headset-input={"mute":false, "channelMap":["MONO"], "channelVolumes":[1.000000]}
+bluez_card.41_AA_01_3C_77_DB:output:headset-hf-output={"mute":false, "channelMap":["MONO"], "channelVolumes":[0.064000]}
+bluez_card.41_AA_01_3C_77_DB:profile:headset-head-unit=["headset-hf-output", "headset-input"]
+bluez_card.18_9C_2C_4C_9C_E7:input:headset-input={"channelVolumes":[1.000000], "mute":false, "channelMap":["MONO"]}
+bluez_card.18_9C_2C_4C_9C_E7:output:headset-hf-output={"channelVolumes":[0.064000], "mute":false, "channelMap":["MONO"]}
+bluez_card.18_9C_2C_4C_9C_E7:profile:headset-head-unit=["headset-hf-output", "headset-input"]
+bluez_card.18_9C_2C_4C_9C_E7:profile:a2dp-sink=["headset-input"]
+bluez_card.41_AA_01_3C_77_DB:profile:a2dp-sink=["headset-output", "headset-input"]
+bluez_card.41_AA_01_3C_77_DB:output:headset-output={"channelVolumes":[0.064759, 0.064759], "latencyOffsetNsec":0, "mute":false, "channelMap":["FL", "FR"]}

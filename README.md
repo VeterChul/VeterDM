@@ -19,7 +19,7 @@
 sudo git clone https://github.com/VeterChul/VeterDM /opt/VeterDM
 ```
 
-### Быстрая установка
+### Быстрая установкаyay
 
 Можно запустить быструю установку с помощью
 ```
