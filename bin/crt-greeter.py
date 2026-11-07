@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import pwd
+import getpass
 import os
 from pathlib import Path
 import glob
@@ -217,6 +218,7 @@ def get_DE_dict(DE_json):
         DE_dict[i["name"]] = i["exec"]
     return DE_dict
 
+
 import threading
 import subprocess
 
@@ -231,6 +233,7 @@ def get_prompt():
     else:
         s = "c"
     return HTML(f"[{now}] {BD["user"]}@{BD["cmd"]} {s}<blinking>></blinking> ")
+
 
 users_list = get_user_list()                    
 DE_json = get_desktop_environments()    
@@ -301,10 +304,7 @@ def repl():
     """
 
 
-    custom_style = Style([
-        ('blinking', 'blink'),
-    ])
-
+    custom_style = Style([('blinking', 'blink')])
 
     # Создаём сессию для пароля (скрытый ввод, без истории)
     # Для этого используем PromptSession с is_password=True
@@ -316,24 +316,25 @@ def repl():
 
     cmd_session = PromptSession(
         completer=completer,
-        history=FileHistory('/tmp/crt-greeter-history'),
         style=custom_style,
         auto_suggest=AutoSuggestFromHistory(),
     )
-    #old_mode = mode
+
+
     while True:
+        
         try:
-            #if mode != old_mode:
-                if mode:
-                    user_input_1 = password_session.prompt(get_prompt)
-                else:    
-                    user_input_1 = cmd_session.prompt(get_prompt)
-                #old_mode = mode
+           if mode:
+               #user_input_1 = getpass.getpass(get_prompt())
+               user_input_1 = password_session.prompt(get_prompt)
+           else:    
+               user_input_1 = cmd_session.prompt(get_prompt)
                 
         except (KeyboardInterrupt, EOFError):
             continue
-        
+
         user_input = user_input_1.strip()
+
             
         if user_input == "":
             play_key_sound('/opt/VeterDM/share/crt-greeter/tap.mp3')  
@@ -341,9 +342,8 @@ def repl():
             play_key_sound('/opt/VeterDM/share/crt-greeter/tap.mp3')  
             mode = False
         elif mode:
-            # В режиме пароля считаем, что пользователь ввёл пароль
-            password = user_input
-            if authenticate_and_start_session(BD["user"], password, BD["cmd_exec"]):
+            if authenticate_and_start_session(BD["user"], user_input, BD["cmd_exec"]):        
+                # В режиме пароля считаем, что пользователь ввёл пароль
                 save_state(BD)
                 os.system('mpg123 -q -f 32768 /opt/VeterDM/share/crt-greeter/poweroff.mp3')  
                 sys.exit(0)
@@ -388,7 +388,7 @@ def repl():
 if __name__ == "__main__":
     
     mode = True
-    test_flag = 0
+    test_flag = 1
     DE_dict = get_DE_dict(DE_json)
     audio = False
 
